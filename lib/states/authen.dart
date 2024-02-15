@@ -10,17 +10,27 @@ class Authen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: GestureDetector(onTap:() => FocusManager.instance.primaryFocus?.unfocus(),
+      body: GestureDetector(
+        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
         child: ListView(
           children: [
-            Row(mainAxisAlignment: MainAxisAlignment.center,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(margin: const EdgeInsets.only(top:64),width: 250,
+                Container(
+                  margin: const EdgeInsets.only(top: 64),
+                  width: 250,
                   child: Column(
                     children: [
-                      displayLogoAppName(), 
-                      WidgetForm(hint: 'Email',sufficwidget: Icon(Icons.email),),
-                      WidgetForm(hint: 'Password',),
+                      displayLogoAppName(),
+                      WidgetForm(
+                        hint: 'Email',
+                        sufficwidget: Icon(Icons.email),
+                      ),
+                      WidgetForm(
+                        hint: 'Password',
+                        obsecu: true,
+                      ),
                     ],
                   ),
                 ),
@@ -36,7 +46,10 @@ class Authen extends StatelessWidget {
     return Row(
       children: [
         displayImage(),
-         WidgetText(data: 'wiwan',textStyle: AppConstant().h1Style(),)
+        WidgetText(
+          data: 'wiwan',
+          textStyle: AppConstant().h1Style(),
+        )
       ],
     );
   }
