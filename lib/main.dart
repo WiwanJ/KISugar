@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:helloflutter/states/authen.dart';
 
 void main() {
@@ -11,6 +12,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
  
-    return MaterialApp(home: Authen(),);
+    return GetMaterialApp(home: Authen(),);
   }
 }
