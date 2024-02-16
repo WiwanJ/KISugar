@@ -20,6 +20,9 @@ class Authen extends StatefulWidget {
 class _AuthenState extends State<Authen> {
   // call controller จากอีก ไฟล์นึง
   AppController appController = Get.put(AppController());
+//key ที่ใช้ในการเช็ค validate
+
+  final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,13 +36,16 @@ class _AuthenState extends State<Authen> {
                 Container(
                   margin: const EdgeInsets.only(top: 64),
                   width: 250,
-                  child: Column(
-                    children: [
-                      displayLogoAppName(),
-                      EmailForm(),
-                      PasswordForm(),
-                      LoginButton()
-                    ],
+                  child: Form(
+                    key: formKey,
+                    child: Column(
+                      children: [
+                        displayLogoAppName(),
+                        EmailForm(),
+                        PasswordForm(),
+                        LoginButton()
+                      ],
+                    ),
                   ),
                 ),
               ],
@@ -63,13 +69,25 @@ class _AuthenState extends State<Authen> {
       margin: const EdgeInsets.only(top: 8),
       child: WidgetButton(
         label: "Login",
-        pressFunc: () {},
+        pressFunc: () {
+          //check validate
+          if (formKey.currentState!.validate()) {
+            
+          }
+        },
       ),
     );
   }
 
   Obx PasswordForm() {
     return Obx(() => WidgetForm(
+          validateFunc: (p0) {
+            if (p0?.isEmpty ?? true) {
+              return "Please fill password";
+            } else {
+              return null;
+            }
+          },
           hint: 'Password',
           obsecu: appController.redEye.value,
           sufficwidget: WidgetIconButton(
@@ -85,6 +103,13 @@ class _AuthenState extends State<Authen> {
 
   WidgetForm EmailForm() {
     return WidgetForm(
+      validateFunc: (p0) {
+        if (p0?.isEmpty ?? true) {
+          return "Please Fill Email";
+        } else {
+          return null;
+        }
+      },
       hint: 'Email',
       sufficwidget: Icon(Icons.email),
     );
