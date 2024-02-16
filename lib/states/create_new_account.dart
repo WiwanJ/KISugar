@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
@@ -25,6 +23,10 @@ class CreateNewAccount extends StatefulWidget {
 class _CreateNewAccountState extends State<CreateNewAccount> {
   AppController appController = Get.put(AppController());
   final formKey = GlobalKey<FormState>();
+
+  TextEditingController nameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
 //ทำงานเป็นตัวแรก
   @override
@@ -54,26 +56,37 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
                   child: Column(
                     children: [
                       WidgetForm(
+                        textEditingController: nameController,
                         validateFunc: (p0) {
-                          if (p0?.isNotEmpty ?? true) {
+                          if (p0?.isEmpty ?? true) {
                             return "โปรดกรอก ชื่อ";
-                          } else {}
+                          } else {
+                            return null;
+                          }
                         },
                         labelWidget: WidgetText(data: 'Dispaly Name'),
                       ),
                       WidgetForm(
+                        textEditingController: emailController,
                         validateFunc: (p0) {
                           if (p0?.isEmpty ?? true) {
                             return 'โปรดกรอก  email';
-                          } else {}
+                          } else {
+                            return null;
+
+                          }
                         },
                         labelWidget: WidgetText(data: 'Email'),
                       ),
                       WidgetForm(
+                        textEditingController: passwordController,
                         validateFunc: (p0) {
                           if (p0?.isEmpty ?? true) {
                             return 'โปรดกรอก password';
-                          } else {}
+                          } else {
+                            return null;
+
+                          }
                         },
                         labelWidget: WidgetText(data: 'Password'),
                       ),
@@ -82,13 +95,17 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
                         pressFunc: () {
                           if (appController.files.isEmpty) {
                             //
-                            Get.snackbar("ไม่มีรูป", 'เลือกรูป',
-                                backgroundColor: GFColors.DANGER,
-                                colorText: GFColors.WHITE,
-                                );
-                          }  else if(formKey.currentState!.validate()) {
-
-                            
+                            Get.snackbar(
+                              "ไม่มีรูป",
+                              'เลือกรูป',
+                              backgroundColor: GFColors.DANGER,
+                              colorText: GFColors.WHITE,
+                            );
+                          } else if (formKey.currentState!.validate()) {
+                            AppService().processCreateNewAccount(
+                                name: nameController.text,
+                                email: emailController.text,
+                                password: passwordController.text);
                           }
                         },
                       ),

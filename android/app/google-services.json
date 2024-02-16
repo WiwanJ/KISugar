@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "756493172409",
+    "project_id": "wiwanzsugar",
+    "storage_bucket": "wiwanzsugar.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:756493172409:android:7340c175ddedfdc8b92568",
+        "android_client_info": {
+          "package_name": "com.example.helloflutte"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDy7bsJJmaGum8ITZvHZBLm9cWBnOY2xwU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:756493172409:android:2fe1f9cac6fa05fbb92568",
+        "android_client_info": {
+          "package_name": "com.example.helloflutter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDy7bsJJmaGum8ITZvHZBLm9cWBnOY2xwU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
