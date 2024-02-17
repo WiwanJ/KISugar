@@ -4,11 +4,13 @@ import 'package:getwidget/getwidget.dart';
 import 'package:helloflutter/states/create_new_account.dart';
 import 'package:helloflutter/utility/app_constant.dart';
 import 'package:helloflutter/utility/app_controller.dart';
+import 'package:helloflutter/utility/app_service.dart';
 import 'package:helloflutter/widgets/widget_button.dart';
 import 'package:helloflutter/widgets/widget_form.dart';
 import 'package:helloflutter/widgets/widget_icon_button.dart';
 import 'package:helloflutter/widgets/widget_image_asset.dart';
 import 'package:helloflutter/widgets/widget_text.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
 class Authen extends StatefulWidget {
   const Authen({super.key});
@@ -23,42 +25,48 @@ class _AuthenState extends State<Authen> {
 //key ที่ใช้ในการเช็ค validate
 
   final formKey = GlobalKey<FormState>();
+
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: GestureDetector(
-        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-        child: ListView(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(top: 64),
-                  width: 250,
-                  child: Form(
-                    key: formKey,
-                    child: Column(
-                      children: [
-                        displayLogoAppName(),
-                        EmailForm(),
-                        PasswordForm(),
-                        LoginButton()
-                      ],
+    return LoaderOverlay(
+      child: Scaffold(
+        body: GestureDetector(
+          onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+          child: ListView(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(top: 64),
+                    width: 250,
+                    child: Form(
+                      key: formKey,
+                      child: Column(
+                        children: [
+                          displayLogoAppName(),
+                          EmailForm(),
+                          PasswordForm(),
+                          LoginButton()
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
-      ),
-      bottomSheet: WidgetButton(
-        label: "Create New Account",
-        pressFunc: () {
-          Get.to(const CreateNewAccount());
-        },
-        gfButtonType: GFButtonType.transparent,
+        bottomSheet: WidgetButton(
+          label: "Create New Account",
+          pressFunc: () {
+            Get.to(const CreateNewAccount());
+          },
+          gfButtonType: GFButtonType.transparent,
+        ),
       ),
     );
   }
@@ -72,7 +80,14 @@ class _AuthenState extends State<Authen> {
         pressFunc: () {
           //check validate
           if (formKey.currentState!.validate()) {
-            
+            // start process
+
+            context.loaderOverlay.show();
+
+            AppService().processCheckLogin(
+                email: emailController.text,
+                password: passwordController.text,
+                context: context);
           }
         },
       ),
@@ -81,6 +96,7 @@ class _AuthenState extends State<Authen> {
 
   Obx PasswordForm() {
     return Obx(() => WidgetForm(
+          textEditingController: passwordController,
           validateFunc: (p0) {
             if (p0?.isEmpty ?? true) {
               return "Please fill password";
@@ -103,6 +119,7 @@ class _AuthenState extends State<Authen> {
 
   WidgetForm EmailForm() {
     return WidgetForm(
+      textEditingController: emailController,
       validateFunc: (p0) {
         if (p0?.isEmpty ?? true) {
           return "Please Fill Email";

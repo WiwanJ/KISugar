@@ -10,6 +10,7 @@ import 'package:getwidget/getwidget.dart';
 import 'package:helloflutter/models/respon_Model.dart';
 import 'package:helloflutter/models/user_api_model.dart';
 import 'package:helloflutter/models/user_model.dart';
+import 'package:helloflutter/states/main_home.dart';
 import 'package:helloflutter/utility/app_constant.dart';
 import 'package:helloflutter/utility/app_controller.dart';
 import 'package:helloflutter/utility/app_dialog.dart';
@@ -97,6 +98,23 @@ class AppService {
           });
         });
       });
+    }).catchError((onError) {
+      context.loaderOverlay.hide();
+      Get.snackbar(onError.code, onError.message,
+          backgroundColor: GFColors.DANGER, colorText: GFColors.WHITE);
+    });
+  }
+
+  void processCheckLogin(
+      {required String email,
+      required String password,
+      required BuildContext context}) async {
+    await FirebaseAuth.instance
+        .signInWithEmailAndPassword(email: email, password: password)
+        .then((value) {
+      context.loaderOverlay.hide();
+      Get.offAll(const MainHome());
+      Get.snackbar("Authen success", 'welcome');
     }).catchError((onError) {
       context.loaderOverlay.hide();
       Get.snackbar(onError.code, onError.message,
