@@ -1,3 +1,4 @@
+
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -5,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:helloflutter/models/respon_Model.dart';
@@ -120,5 +122,22 @@ class AppService {
       Get.snackbar(onError.code, onError.message,
           backgroundColor: GFColors.DANGER, colorText: GFColors.WHITE);
     });
+  }
+
+  Future<void> processFindLocation() async {
+    //check ว่า Location เปิดหรือไม่
+    bool locationService = await Geolocator.isLocationServiceEnabled();
+    if (locationService) {
+      //เปิด Locaion serivice
+    } else {
+      //ปิด location service
+      AppDialog().narmalDialog(
+        title: 'open service',
+        contentWidget: const WidgetText(data: 'please open service'),
+        secontWidget: WidgetButton(label: 'open serice', pressFunc: () {
+          
+        },)
+      );
+    }
   }
 }
