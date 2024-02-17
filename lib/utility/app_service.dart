@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -129,15 +128,55 @@ class AppService {
     bool locationService = await Geolocator.isLocationServiceEnabled();
     if (locationService) {
       //เปิด Locaion serivice
+      //check ว่า เคื่อง user เปิด locaion แบบไหน
+      LocationPermission locationPermission =
+          await Geolocator.checkPermission();
+      if (locationService == LocationPermission.deniedForever) {
+        //deniedForever ไม่อนุญาตเลย ให้ ไปหน้าขอเปิด location
+        dialogCallPermission();
+      } else {
+        //denied   Alway , one หาพิกัดได้เลย
+        if (locationPermission == LocationPermission.denied) {
+          //denieda
+          locationPermission = await Geolocator.requestPermission();
+          if ((locationPermission != LocationPermission.always) &&
+              (locationPermission != LocationPermission.whileInUse)) {
+            dialogCallPermission();
+          } else {
+            Position position = await Geolocator.getCurrentPosition();
+            appController.pisitopns.add(position);
+          }
+        } else {
+          // Alway , one หาพิกัดได้เลย
+          Position position = await Geolocator.getCurrentPosition();
+          appController.pisitopns.add(position);
+        }
+      }
     } else {
       //ปิด location service
       AppDialog().narmalDialog(
-        title: 'open service',
-        contentWidget: const WidgetText(data: 'please open service'),
-        secontWidget: WidgetButton(label: 'open serice', pressFunc: () {
-          
-        },)
-      );
+          title: 'open service',
+          contentWidget: const WidgetText(data: 'please open service'),
+          secontWidget: WidgetButton(
+            label: 'open serice',
+            pressFunc: () async {
+              //เปิดหน้า location ให้ user แบบ อัตโนมัต
+              await Geolocator.openLocationSettings();
+              exit(0);
+            },
+          ));
     }
+  }
+
+  void dialogCallPermission() {
+    AppDialog().narmalDialog(
+        title: 'open permission',
+        secontWidget: WidgetButton(
+          label: 'open permission',
+          pressFunc: () async {
+            await Geolocator.openAppSettings();
+            exit(0);
+          },
+        ));
   }
 }

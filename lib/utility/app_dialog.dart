@@ -13,18 +13,21 @@ class AppDialog {
     Widget? firstWidget,
     Widget? secontWidget,
   }) {
-    Get.dialog(AlertDialog(
-      icon: iconWidget,
-      title: WidgetText(data: title),
-      content: contentWidget,
-      actions: [
-        firstWidget ?? const SizedBox(),
-        secontWidget ??
-            WidgetButton(
-              label: 'OK',
-              pressFunc: () => Get.back(),
-            )
-      ],
-    ));
+    Get.dialog(
+      AlertDialog(
+        icon: iconWidget,
+        title: WidgetText(data: title),
+        content: contentWidget,
+        actions: [
+          firstWidget ?? const SizedBox(),
+          secontWidget ??
+              WidgetButton(
+                label: 'OK',
+                pressFunc: () => Get.back(),
+              )
+        ],
+      ),
+      barrierDismissible: false,
+    );
   }
 }
