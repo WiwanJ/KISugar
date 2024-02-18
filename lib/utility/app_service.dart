@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:helloflutter/models/area_model.dart';
 import 'package:helloflutter/models/respon_Model.dart';
 import 'package:helloflutter/models/user_api_model.dart';
 import 'package:helloflutter/models/user_model.dart';
@@ -178,5 +181,39 @@ class AppService {
             exit(0);
           },
         ));
+  }
+
+  Future<void> processSaveArea(
+      {required String nameArea, required List<LatLng> latlngs}) async {
+    var geoPoints = <GeoPoint>[];
+    for (var element in latlngs) {
+      geoPoints.add(GeoPoint(element.latitude, element.longitude));
+
+      AreaModel areaModel = AreaModel(
+        nameArea: nameArea,
+        timestamp: Timestamp.fromDate(DateTime.now()),
+        geoPoints: geoPoints,
+        qrCode: 'ki${Random().nextInt(100000)}',
+      );
+
+      var user = FirebaseAuth.instance.currentUser;
+      String uidLogin = user!.uid;
+
+      print('## uid.Login --> $uidLogin');
+      print('## areaModel--> ${areaModel.toMap()}');
+
+      //ต้องทำเป็น async mathod ก่นอ
+
+      await FirebaseFirestore.instance
+          .collection('user')
+          .doc(uidLogin)
+          .collection('area')
+          .doc()
+          .set(areaModel.toMap())
+          .then((value) {
+        Get.snackbar('add succcess', 'thankyou');
+        appController.indexBody.value = 0;
+      });
+    }
   }
 }

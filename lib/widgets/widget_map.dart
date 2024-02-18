@@ -34,6 +34,7 @@ class _WidgetMapState extends State<WidgetMap> {
           markers: appController.mapMarkers.isEmpty
               ? <Marker>{}
               : Set<Marker>.of(appController.mapMarkers.values),
+              polygons: appController.setPolygons,
         ));
   }
 }
