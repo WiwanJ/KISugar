@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:helloflutter/utility/app_controller.dart';
 import 'package:helloflutter/utility/app_service.dart';
+import 'package:helloflutter/widgets/widget_map.dart';
 import 'package:helloflutter/widgets/widget_text.dart';
 
 class BodyLocation extends StatefulWidget {
@@ -24,6 +25,9 @@ class _BodyLocationState extends State<BodyLocation> {
   Widget build(BuildContext context) {
     return Obx(() => appController.pisitopns.isEmpty
         ? const SizedBox()
-        : WidgetText(data: appController.pisitopns.last.toString()));
-  }
+        : WidgetMap(
+            lat: appController.pisitopns.last.latitude,
+            lng: appController.pisitopns.last.longitude,
+            myLocationEnable: true,));
+  }   
 }
